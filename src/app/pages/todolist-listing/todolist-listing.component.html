@@ -1,0 +1,9 @@
+@if (todos.length > 0) {
+  <main class="main">
+    <ul class="todolist__items-wrap">
+      @for (todo of todos; track todo) {
+        <tdl-item [todo]="todo" (remove)="removeTodo($event)"></tdl-item>
+      }
+    </ul>
+  </main>
+}

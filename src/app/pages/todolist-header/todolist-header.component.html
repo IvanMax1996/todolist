@@ -1,0 +1,16 @@
+<div class="todolist__input-wrap">
+  @if (todoList.length > 0 && toggleBtnVisible) {
+    <button
+      class="todolist__btn-toggle"
+      type="button"
+      (click)="toggleAll()"
+    ></button>
+  }
+
+  <input
+    class="todolist__input"
+    [(ngModel)]="title"
+    placeholder="Что нужно добавить?"
+    (keyup.enter)="addTodo()"
+  />
+</div>
