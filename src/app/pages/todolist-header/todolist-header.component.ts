@@ -21,7 +21,7 @@ export class TodolistHeaderComponent {
     return this.todolistService.todos$.pipe(toArray())
   }
 
-  get countTodo() {
+  get countTodo(): number {
     return this.todolistService.countTodo
   }
 
@@ -33,7 +33,7 @@ export class TodolistHeaderComponent {
   //   return this.todolistService.getItems(Status.Active);
   // }
 
-  get toggleBtnVisible() {
+  get toggleBtnVisible(): boolean {
     return this.todolistService.toggleBtnVisible;
   }
 

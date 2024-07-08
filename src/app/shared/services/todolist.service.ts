@@ -9,7 +9,7 @@ export class TodolistService {
   countId: number = 0;
   todos$: Observable<Todolist> = of()
 
-  get countTodo() {
+  get countTodo(): number {
     let countObservable: number = 0
     this.todos$.pipe(count()).subscribe(item => {
       countObservable = item

@@ -1,7 +1,7 @@
-@if (todoList.length > 0) {
+@if (countTodo > 0) {
   <main class="main">
     <ul class="todolist__items-wrap">
-      @for (todo of todoList; track todo.id) {
+      @for (todo of todoList | async; track todo.id) {
         <tdl-item [todo]="todo" (remove)="removeTodo($event)"></tdl-item>
       }
     </ul>

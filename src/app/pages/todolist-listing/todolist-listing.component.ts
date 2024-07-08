@@ -1,5 +1,5 @@
-import { AfterViewChecked, Component, DoCheck, Input, OnInit } from '@angular/core';
-import { Todolist } from '../../shared/types/todolist.type';
+import { Component} from '@angular/core';
+import { Status, Todolist } from '../../shared/types/todolist.type';
 import { TodolistService } from '../../shared/services/todolist.service';
 import { TodolistItemComponent } from '../todolist-item/todolist-item.component';
 import { AsyncPipe } from '@angular/common';
@@ -13,24 +13,18 @@ import { Observable, toArray } from 'rxjs';
   styleUrl: './todolist-listing.component.scss',
 })
 export class TodolistListingComponent {
-  
-
   constructor(private todolistService: TodolistService) {}
-  todo$ = this.todolistService.todos$
 
-  get status() {
+  get status(): Status {
     return this.todolistService.status;
   }
 
-  
+  get countTodo(): number {
+    return this.todolistService.countTodo
+  }
 
-  get todoList() {
-    const result: Todolist[] = []
-    this.todolistService.todos$.subscribe(item => {
-      result.push(item)
-    });
-
-    return result
+  get todoList(): Observable<Todolist[]> {
+    return this.todolistService.todos$.pipe(toArray())
   }
 
   removeTodo(todo: Todolist): void {
