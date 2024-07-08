@@ -1,5 +1,5 @@
 import { AfterViewChecked, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, inject } from '@angular/core';
-import { Todolist } from '../../shared/types/todolist.interface';
+import { Status, Todolist } from '../../shared/types/todolist.type';
 import { FormsModule } from '@angular/forms';
 import { NgClass } from '@angular/common';
 import { TodolistService } from '../../shared/services/todolist.service';
@@ -19,15 +19,15 @@ export class TodolistItemComponent implements OnInit, AfterViewChecked {
   private todolistService = inject(TodolistService)
 
   isEditing = false;
-  randomLabel!: string
+  randomLabel: string = ''
   title: string = ''
 
   get activeTodos(): Todolist[] {
-    return this.todolistService.getItems('active');
+    return this.todolistService.getItems(Status.Active);
   }
 
   get completedTodos(): Todolist[] {
-    return this.todolistService.getItems('completed');
+    return this.todolistService.getItems(Status.Completed);
   }
 
   removeTodo(): void {
@@ -40,11 +40,11 @@ export class TodolistItemComponent implements OnInit, AfterViewChecked {
     this.todolistService.toggleButtonVisible()
   }
 
-  startEdit() {
+  startEdit(): void {
     this.isEditing = true;
   }
 
-  updateTodo() {
+  updateTodo(): void {
     if (!this.title) {
       this.remove.emit(this.todo);
     } else {
@@ -54,11 +54,11 @@ export class TodolistItemComponent implements OnInit, AfterViewChecked {
     this.isEditing = false;
   }
 
-  handleBlur(e: Event) {
+  handleBlur(): void {
     this.isEditing = false;
   }
 
-  handleFocus(e: Event) {
+  handleFocus(): void {
     this.title = this.todo.title;
   }
 

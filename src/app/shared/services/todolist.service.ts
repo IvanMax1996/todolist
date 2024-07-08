@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
-import { Todolist } from '../types/todolist.interface';
+import { Status, Todolist } from '../types/todolist.type';
 
 @Injectable()
 export class TodolistService {
   todos: Todolist[] = [];
-  status: string = 'all';
+  status: Status = Status.All
   toggleBtnVisible: boolean = true;
 
   get completedTodos(): Todolist[] {
-    return this.getItems('completed');
+    return this.getItems(Status.Completed);
   }
 
   get activeTodos(): Todolist[] {
-    return this.getItems('active');
+    return this.getItems(Status.Active);
   }
 
   addItem(title: string): void {
@@ -24,7 +24,7 @@ export class TodolistService {
     this.todos.push(todo);
   }
 
-  getItems(status: string): Todolist[] {
+  getItems(status: Status): Todolist[] {
     switch (status) {
       case 'active':
         const finalActiveArray = this.todos.filter((todo) => !todo.completed)
@@ -38,10 +38,11 @@ export class TodolistService {
 
   removeItem(todo: Todolist): void {
     const index = this.todos.indexOf(todo);
+
     this.todos.splice(index, 1);
   }
 
-  toggleAll(status: string): void {
+  toggleAll(status: Status): void {
     const isCompleted = this.todos.every((item) => item.completed === true);
 
     if ((status === 'all' && !isCompleted) || status === 'active') {
@@ -64,7 +65,7 @@ export class TodolistService {
     this.todos = this.todos.filter((todo) => !todo.completed);
   }
 
-  toggleButtonVisible() {
+  toggleButtonVisible(): void {
     if (this.status !== 'all') {
       if (this.activeTodos.length === 0 || this.completedTodos.length === 0) {
         this.toggleBtnVisible = false;

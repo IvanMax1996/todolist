@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TodolistService } from '../../shared/services/todolist.service';
-import { Todolist } from '../../shared/types/todolist.interface';
+import { Status, Todolist } from '../../shared/types/todolist.type';
 
 @Component({
   standalone: true,
@@ -20,18 +20,18 @@ export class TodolistHeaderComponent {
   }
 
   get completedTodos(): Todolist[] {
-    return this.todolistService.getItems('completed');
+    return this.todolistService.getItems(Status.Completed);
   }
 
   get activeTodos(): Todolist[] {
-    return this.todolistService.getItems('active');
+    return this.todolistService.getItems(Status.Active);
   }
 
   get toggleBtnVisible() {
     return this.todolistService.toggleBtnVisible;
   }
 
-  addTodo() {
+  addTodo(): void {
     if (this.title) {
       this.todolistService.addItem(this.title);
 
@@ -43,7 +43,7 @@ export class TodolistHeaderComponent {
     } else this.todolistService.toggleBtnVisible = true;
   }
 
-  toggleAll() {
+  toggleAll(): void {
     const status = this.todolistService.status;
 
     this.todolistService.toggleAll(status);

@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { Todolist } from '../../shared/types/todolist.interface';
+import { Status, Todolist } from '../../shared/types/todolist.type';
 import { TodolistService } from '../../shared/services/todolist.service';
 
 @Component({
@@ -14,7 +14,7 @@ export class TodolistFooterComponent {
 
   constructor(private todolistService: TodolistService) {}
 
-  get status() {
+  get status(): Status {
     return this.todolistService.status;
   }
 
@@ -23,11 +23,11 @@ export class TodolistFooterComponent {
   }
 
   get activeTodos(): Todolist[] {
-    return this.todolistService.getItems('active');
+    return this.todolistService.getItems(Status.Active);
   }
 
   get completedTodos(): Todolist[] {
-    return this.todolistService.getItems('completed');
+    return this.todolistService.getItems(Status.Completed);
   }
 
   visibilityToggleButton(filteredTodo: Todolist[]): void {
@@ -36,7 +36,7 @@ export class TodolistFooterComponent {
     } else this.todolistService.toggleBtnVisible = true;
   }
 
-  removeActiveClass(event: Event) {
+  removeActiveClass(event: Event): void {
     const allBtnFooter = document.querySelectorAll(
       '.todolist__footer-btn-wrap button'
     );
@@ -50,8 +50,8 @@ export class TodolistFooterComponent {
     btn.classList.add('active');
   }
 
-  getActive(event: Event) {
-    this.todolistService.status = 'active';
+  getActive(event: Event): void {
+    this.todolistService.status = Status.Active;
 
     this.visibilityToggleButton(this.activeTodos)
 
@@ -59,26 +59,25 @@ export class TodolistFooterComponent {
   }
 
   getCompleted(event: Event): void {
-    this.todolistService.status = 'completed';
+    this.todolistService.status = Status.Completed;
 
     this.visibilityToggleButton(this.completedTodos)
 
     this.removeActiveClass(event);
   }
 
-  getAll(event: Event) {
-    this.todolistService.status = 'all';
+  getAll(event: Event): void {
+    this.todolistService.status = Status.All;
     this.todolistService.toggleBtnVisible = true;
 
     this.removeActiveClass(event);
   }
 
-  clearCompleted() {
+  clearCompleted(): void {
     this.todolistService.clearCompleted();
 
     if (this.activeTodos.length === 0) {
-      this.todolistService.status = 'all'
+      this.todolistService.status = Status.All;
     }
-    
   }
 }

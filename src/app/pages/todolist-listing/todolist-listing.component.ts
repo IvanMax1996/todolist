@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Todolist } from '../../shared/types/todolist.interface';
+import { Todolist } from '../../shared/types/todolist.type';
 import { TodolistService } from '../../shared/services/todolist.service';
 import { TodolistItemComponent } from '../todolist-item/todolist-item.component';
 
