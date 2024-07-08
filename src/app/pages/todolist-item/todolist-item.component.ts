@@ -35,7 +35,7 @@ export class TodolistItemComponent implements OnInit, AfterViewChecked {
   }
 
   toggleTodo(): void {
-    this.todo.completed = !this.todo.completed;
+    this.todolistService.toggleCheckedItem(this.todo)
 
     this.todolistService.toggleButtonVisible()
   }

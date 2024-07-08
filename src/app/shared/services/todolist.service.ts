@@ -47,6 +47,16 @@ export class TodolistService {
     this.todos.splice(index, 1);
   }
 
+  toggleCheckedItem(todo: Todolist): void {
+    const indexCheckedItem = this.todos.indexOf(todo);
+
+    this.todos = this.todos.map((todo, index) => {
+      if (indexCheckedItem === index) {
+        return {...todo, completed: !todo.completed};
+      } else return {...todo}
+    })
+  }
+
   toggleAll(status: Status): void {
     const isCompleted = this.todos.every((item) => item.completed === true);
 
