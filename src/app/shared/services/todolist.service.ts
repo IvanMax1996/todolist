@@ -6,6 +6,7 @@ export class TodolistService {
   todos: Todolist[] = [];
   status: Status = Status.All
   toggleBtnVisible: boolean = true;
+  countId: number = 0;
 
   get completedTodos(): Todolist[] {
     return this.getItems(Status.Completed);
@@ -17,11 +18,14 @@ export class TodolistService {
 
   addItem(title: string): void {
     const todo: Todolist = {
+      id: this.countId,
       title,
       completed: false,
     };
 
     this.todos.push(todo);
+
+    this.countId++
   }
 
   getItems(status: Status): Todolist[] {
@@ -32,6 +36,7 @@ export class TodolistService {
       case 'completed':
         return this.todos.filter((todo) => todo.completed);
     }
+
 
     return this.todos;
   }
