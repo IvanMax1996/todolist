@@ -1,10 +1,5 @@
 <div class="todolist__input-wrap">
-  @if (todo | async; as todo) {
-    
-    
-  }
-  
-  @if (todoList.length > 0 && toggleBtnVisible) {
+  @if (countTodo > 0 && toggleBtnVisible) {
     <button
       class="todolist__btn-toggle"
       type="button"

@@ -8,14 +8,34 @@ export class TodolistService {
   toggleBtnVisible: boolean = true;
   countId: number = 0;
   todos$: Observable<Todolist> = of()
-  countObservable = this.todos$.pipe(count())
 
-  get completedTodos() {
-    return this.getItems(Status.Completed);
+  get countTodo() {
+    let countObservable: number = 0
+    this.todos$.pipe(count()).subscribe(item => {
+      countObservable = item
+    })
+
+    return countObservable
   }
 
-  get activeTodos() {
-    return this.getItems(Status.Active);
+  get completedTodos(): Todolist[] {
+    const completedArray: Todolist[] = []
+
+    this.getItems(Status.Completed).subscribe(item => {
+      completedArray.push(item)
+    });
+
+    return completedArray
+  }
+
+  get activeTodos(): Todolist[] {
+    const activeArray: Todolist[] = []
+
+    this.getItems(Status.Active).subscribe(item => {
+      activeArray.push(item)
+    })
+
+    return activeArray
   }
 
 
@@ -30,12 +50,10 @@ export class TodolistService {
 
     this.todos$ = merge(this.todos$, todoItemObservable)
 
-    // this.todos.push(todo);
-
     this.countId++;
   }
 
-  getItems(status: Status) {
+  getItems(status: Status): Observable<Todolist> {
     switch (status) {
       case 'active':
         return this.todos$.pipe(
@@ -54,7 +72,7 @@ export class TodolistService {
     return this.todos$;
   }
 
-  removeItem(todo: Todolist) {
+  removeItem(todo: Todolist): void {
     this.todos$ = this.todos$.pipe(
       filter(item => {
         return item.id !== todo.id
@@ -116,21 +134,9 @@ export class TodolistService {
 
   toggleButtonVisible(): void {
     if (this.status !== 'all') {
-      const arrayActive: Todolist[] = []
-      const arrayCompleted: Todolist[] = []
-
-      this.activeTodos.subscribe(item => {
-        arrayActive.push(item)
-      })
-
-      this.completedTodos.subscribe(item => {
-        arrayCompleted.push(item)
-      })
-
-      if (arrayActive.length === 0 || arrayCompleted.length === 0) {
+      if (this.activeTodos.length === 0 || this.completedTodos.length === 0) {
         this.toggleBtnVisible = false;
       } else this.toggleBtnVisible = true;
-
     }
   }
 }

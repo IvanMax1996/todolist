@@ -1,7 +1,7 @@
-import { AfterViewChecked, Component, DoCheck, Input, OnInit } from '@angular/core';
+import { Component} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TodolistService } from '../../shared/services/todolist.service';
-import { AsyncPipe, CommonModule } from '@angular/common';
+import { AsyncPipe} from '@angular/common';
 import { Status, Todolist } from '../../shared/types/todolist.type';
 import { Observable, toArray } from 'rxjs';
 
@@ -21,22 +21,17 @@ export class TodolistHeaderComponent {
     return this.todolistService.todos$.pipe(toArray())
   }
 
-  get todoList() {
-    const result: Todolist[] = []
-    this.todolistService.todos$.subscribe(item => {
-      result.push(item)
-    });
-
-    return result
+  get countTodo() {
+    return this.todolistService.countTodo
   }
 
-  get completedTodos() {
-    return this.todolistService.getItems(Status.Completed);
-  }
+  // get completedTodos() {
+  //   return this.todolistService.getItems(Status.Completed);
+  // }
 
-  get activeTodos() {
-    return this.todolistService.getItems(Status.Active);
-  }
+  // get activeTodos() {
+  //   return this.todolistService.getItems(Status.Active);
+  // }
 
   get toggleBtnVisible() {
     return this.todolistService.toggleBtnVisible;
@@ -49,7 +44,7 @@ export class TodolistHeaderComponent {
       this.title = '';
     }
 
-    if (this.todoList.length === 0) {
+    if (this.countTodo === 0) {
       this.todolistService.toggleBtnVisible = false;
     } else this.todolistService.toggleBtnVisible = true;
   }
