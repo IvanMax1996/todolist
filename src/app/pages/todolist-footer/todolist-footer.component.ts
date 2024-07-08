@@ -18,17 +18,17 @@ export class TodolistFooterComponent {
     return this.todolistService.status;
   }
 
-  get todos(): Todolist[] {
-    return this.todolistService.getItems(this.status);
-  }
+  // get todos(): Todolist[] {
+  //   return this.todolistService.getItems(this.status);
+  // }
 
-  get activeTodos(): Todolist[] {
-    return this.todolistService.getItems(Status.Active);
-  }
+  // get activeTodos(): Todolist[] {
+  //   return this.todolistService.getItems(Status.Active);
+  // }
 
-  get completedTodos(): Todolist[] {
-    return this.todolistService.getItems(Status.Completed);
-  }
+  // get completedTodos(): Todolist[] {
+  //   return this.todolistService.getItems(Status.Completed);
+  // }
 
   visibilityToggleButton(filteredTodo: Todolist[]): void {
     if (filteredTodo.length === 0) {
@@ -53,7 +53,7 @@ export class TodolistFooterComponent {
   getActive(event: Event): void {
     this.todolistService.status = Status.Active;
 
-    this.visibilityToggleButton(this.activeTodos)
+    // this.visibilityToggleButton(this.activeTodos)
 
     this.removeActiveClass(event);
   }
@@ -61,7 +61,7 @@ export class TodolistFooterComponent {
   getCompleted(event: Event): void {
     this.todolistService.status = Status.Completed;
 
-    this.visibilityToggleButton(this.completedTodos)
+    // this.visibilityToggleButton(this.completedTodos)
 
     this.removeActiveClass(event);
   }
@@ -76,8 +76,8 @@ export class TodolistFooterComponent {
   clearCompleted(): void {
     this.todolistService.clearCompleted();
 
-    if (this.activeTodos.length === 0) {
-      this.todolistService.status = Status.All;
-    }
+    // if (this.activeTodos.length === 0) {
+    //   this.todolistService.status = Status.All;
+    // }
   }
 }

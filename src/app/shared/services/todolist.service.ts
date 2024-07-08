@@ -1,90 +1,136 @@
 import { Injectable } from '@angular/core';
 import { Status, Todolist } from '../types/todolist.type';
+import { count, every, filter, map, merge, Observable, of } from 'rxjs';
 
 @Injectable()
 export class TodolistService {
-  todos: Todolist[] = [];
-  status: Status = Status.All
+  status: Status = Status.All;
   toggleBtnVisible: boolean = true;
   countId: number = 0;
+  todos$: Observable<Todolist> = of()
+  countObservable = this.todos$.pipe(count())
 
-  get completedTodos(): Todolist[] {
+  get completedTodos() {
     return this.getItems(Status.Completed);
   }
 
-  get activeTodos(): Todolist[] {
+  get activeTodos() {
     return this.getItems(Status.Active);
   }
 
+
   addItem(title: string): void {
-    const todo: Todolist = {
+    const todoItem: Todolist = {
       id: this.countId,
       title,
       completed: false,
     };
 
-    this.todos.push(todo);
+    const todoItemObservable = of(todoItem)
 
-    this.countId++
+    this.todos$ = merge(this.todos$, todoItemObservable)
+
+    // this.todos.push(todo);
+
+    this.countId++;
   }
 
-  getItems(status: Status): Todolist[] {
+  getItems(status: Status) {
     switch (status) {
       case 'active':
-        const finalActiveArray = this.todos.filter((todo) => !todo.completed)
-        return finalActiveArray;
+        return this.todos$.pipe(
+          filter((item) => {
+            return !item.completed;
+          })
+        );
       case 'completed':
-        return this.todos.filter((todo) => todo.completed);
+        return this.todos$.pipe(
+          filter((item) => {
+            return item.completed;
+          })
+        );
     }
 
-
-    return this.todos;
+    return this.todos$;
   }
 
-  removeItem(todo: Todolist): void {
-    const index = this.todos.indexOf(todo);
-
-    this.todos.splice(index, 1);
+  removeItem(todo: Todolist) {
+    this.todos$ = this.todos$.pipe(
+      filter(item => {
+        return item.id !== todo.id
+      })
+    )
   }
 
   toggleCheckedItem(todo: Todolist): void {
-    const indexCheckedItem = this.todos.indexOf(todo);
-
-    this.todos = this.todos.map((todo, index) => {
-      if (indexCheckedItem === index) {
-        return {...todo, completed: !todo.completed};
-      } else return {...todo}
-    })
+    this.todos$ = this.todos$.pipe(
+      map(item => {
+        if(item.id === todo.id) {
+          return {...item, completed: !item.completed}
+        } 
+        else return item
+      })
+    )
   }
 
   toggleAll(status: Status): void {
-    const isCompleted = this.todos.every((item) => item.completed === true);
+    let isCompletedResult
+    const isCompleted: Observable<boolean> = this.todos$.pipe(
+      every(item => item.completed === true)
+    )
 
-    if ((status === 'all' && !isCompleted) || status === 'active') {
-      this.todos = this.todos.map((todo) => {
-        if (todo.completed === false) {
-          return { ...todo, completed: true };
-        } else return todo;
-      });
-    } else if (isCompleted) {
-      this.todos = this.todos.map((todo) => {
-        return { ...todo, completed: false };
-      });
-    } else
-      this.todos = this.todos.map((todo) => {
-        return { ...todo, completed: false };
-      });
+    isCompleted.subscribe(item => {
+      isCompletedResult = item
+    })
+
+    if ((status === 'all' && !isCompletedResult) || status === 'active') {
+      this.todos$ = this.todos$.pipe(
+        map(item => {
+          if (item.completed === false) {
+            return {...item, completed: true}
+          } else return item
+        })
+      )
+    } else if (isCompletedResult) {
+      this.todos$ = this.todos$.pipe(
+        map(item => {
+         return {...item, completed: false}
+        })
+      )
+    } else {
+      this.todos$ = this.todos$.pipe(
+        map(item => {
+         return {...item, completed: false}
+        })
+      )
+    }
   }
 
   clearCompleted(): void {
-    this.todos = this.todos.filter((todo) => !todo.completed);
+    this.todos$ = this.todos$.pipe(
+      filter(item => {
+        return !item.completed
+      })
+    )
   }
 
   toggleButtonVisible(): void {
     if (this.status !== 'all') {
-      if (this.activeTodos.length === 0 || this.completedTodos.length === 0) {
+      const arrayActive: Todolist[] = []
+      const arrayCompleted: Todolist[] = []
+
+      this.activeTodos.subscribe(item => {
+        arrayActive.push(item)
+      })
+
+      this.completedTodos.subscribe(item => {
+        arrayCompleted.push(item)
+      })
+
+      if (arrayActive.length === 0 || arrayCompleted.length === 0) {
         this.toggleBtnVisible = false;
       } else this.toggleBtnVisible = true;
+
     }
   }
 }

@@ -22,13 +22,13 @@ export class TodolistItemComponent implements OnInit, AfterViewChecked {
   randomLabel: string = ''
   title: string = ''
 
-  get activeTodos(): Todolist[] {
-    return this.todolistService.getItems(Status.Active);
-  }
+  // get activeTodos(): Todolist[] {
+  //   return this.todolistService.getItems(Status.Active);
+  // }
 
-  get completedTodos(): Todolist[] {
-    return this.todolistService.getItems(Status.Completed);
-  }
+  // get completedTodos(): Todolist[] {
+  //   return this.todolistService.getItems(Status.Completed);
+  // }
 
   removeTodo(): void {
     this.remove.emit(this.todo);
@@ -37,7 +37,7 @@ export class TodolistItemComponent implements OnInit, AfterViewChecked {
   toggleTodo(): void {
     this.todolistService.toggleCheckedItem(this.todo)
 
-    this.todolistService.toggleButtonVisible()
+    // this.todolistService.toggleButtonVisible()
   }
 
   startEdit(): void {
@@ -63,7 +63,7 @@ export class TodolistItemComponent implements OnInit, AfterViewChecked {
   }
 
   ngOnInit(): void {
-    this.randomLabel = this.todo.title.replace(' ', '-').slice(0, 10) + '-' + Math.floor(Math.random() * 10) 
+    this.randomLabel = this.todo.title.replace(' ', '-').slice(0, 10) + '-' + Math.floor(Math.random() * 100) 
   }
 
   ngAfterViewChecked(): void {
