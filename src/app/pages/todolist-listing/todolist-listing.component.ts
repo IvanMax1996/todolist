@@ -24,7 +24,7 @@ export class TodolistListingComponent {
   }
 
   get todoList(): Observable<Todolist[]> {
-    return this.todolistService.todos$.pipe(toArray())
+    return this.todolistService.getItems(this.status).pipe(toArray())
   }
 
   removeTodo(todo: Todolist): void {

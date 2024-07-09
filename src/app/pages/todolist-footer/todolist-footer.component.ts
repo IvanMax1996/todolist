@@ -1,6 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { Status, Todolist } from '../../shared/types/todolist.type';
 import { TodolistService } from '../../shared/services/todolist.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'tdl-footer',
@@ -14,21 +15,13 @@ export class TodolistFooterComponent {
 
   constructor(private todolistService: TodolistService) {}
 
-  get status(): Status {
-    return this.todolistService.status;
+  get activeTodos(): Todolist[] {
+    return this.todolistService.activeTodos
   }
 
-  // get todos(): Todolist[] {
-  //   return this.todolistService.getItems(this.status);
-  // }
-
-  // get activeTodos(): Todolist[] {
-  //   return this.todolistService.getItems(Status.Active);
-  // }
-
-  // get completedTodos(): Todolist[] {
-  //   return this.todolistService.getItems(Status.Completed);
-  // }
+  get completedTodos(): Todolist[] {
+    return this.todolistService.completedTodos
+  }
 
   visibilityToggleButton(filteredTodo: Todolist[]): void {
     if (filteredTodo.length === 0) {
@@ -53,7 +46,7 @@ export class TodolistFooterComponent {
   getActive(event: Event): void {
     this.todolistService.status = Status.Active;
 
-    // this.visibilityToggleButton(this.activeTodos)
+    this.visibilityToggleButton(this.activeTodos)
 
     this.removeActiveClass(event);
   }
@@ -61,7 +54,7 @@ export class TodolistFooterComponent {
   getCompleted(event: Event): void {
     this.todolistService.status = Status.Completed;
 
-    // this.visibilityToggleButton(this.completedTodos)
+    this.visibilityToggleButton(this.completedTodos)
 
     this.removeActiveClass(event);
   }
@@ -76,8 +69,8 @@ export class TodolistFooterComponent {
   clearCompleted(): void {
     this.todolistService.clearCompleted();
 
-    // if (this.activeTodos.length === 0) {
-    //   this.todolistService.status = Status.All;
-    // }
+    if (this.activeTodos.length === 0) {
+      this.todolistService.status = Status.All;
+    }
   }
 }
