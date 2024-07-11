@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { TodolistService } from '../../shared/services/todolist.service';
 import { AsyncPipe } from '@angular/common';
 import { Status } from '../../shared/types/todolist.type';
+import { count } from 'rxjs';
 
 @Component({
   standalone: true,
@@ -21,7 +22,33 @@ export class TodolistHeaderComponent {
   }
 
   get countTodo(): number {
-    return this.todolistService.countTodo
+    let countObservable: number = 0
+
+    this.todolistService.countTodo.subscribe(item => {
+      countObservable = item
+    })
+
+    return countObservable
+  }
+
+  get completedTodosLength(): number {
+    let completedLength: number = 0
+
+    this.todolistService.completedTodos.pipe(count()).subscribe(item => {
+      completedLength = item
+    })
+
+    return completedLength
+  }
+
+  get activeTodosLength(): number {
+    let activeLength: number = 0
+
+    this.todolistService.activeTodos.pipe(count()).subscribe(item => {
+      activeLength = item
+    })
+
+    return activeLength
   }
 
   get toggleBtnVisible(): boolean {
@@ -41,8 +68,14 @@ export class TodolistHeaderComponent {
   }
 
   toggleAll(): void {
-    this.todolistService.toggleAll(this.status);
+    let isCompletedResult: boolean = false
 
-    this.todolistService.toggleButtonVisible();
+    this.todolistService.isCompleted.subscribe(item => {
+      isCompletedResult = item
+    })
+
+    this.todolistService.toggleAll(this.status, isCompletedResult);
+
+    this.todolistService.toggleButtonVisible(this.activeTodosLength, this.completedTodosLength);
   }
 }

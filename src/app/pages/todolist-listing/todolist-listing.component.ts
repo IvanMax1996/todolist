@@ -20,7 +20,13 @@ export class TodolistListingComponent {
   }
 
   get countTodo(): number {
-    return this.todolistService.countTodo
+    let countObservable: number = 0
+
+    this.todolistService.countTodo.subscribe(item => {
+      countObservable = item
+    })
+
+    return countObservable
   }
 
   get todoList(): Observable<Todolist[]> {

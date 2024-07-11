@@ -9,35 +9,23 @@ export class TodolistService {
   countId: number = 0;
   todos$: Observable<Todolist> = of()
 
-  get countTodo(): number {
-    let countObservable: number = 0
-    this.todos$.pipe(count()).subscribe(item => {
-      countObservable = item
-    })
-
-    return countObservable
+  get isCompleted(): Observable<boolean> {
+    return this.todos$.pipe(
+      every(item => item.completed === true)
+    )
   }
 
-  get completedTodos(): Todolist[] {
-    const completedArray: Todolist[] = []
-
-    this.getItems(Status.Completed).subscribe(item => {
-      completedArray.push(item)
-    });
-
-    return completedArray
+  get countTodo(): Observable<number> {
+    return this.todos$.pipe(count())
   }
 
-  get activeTodos(): Todolist[] {
-    const activeArray: Todolist[] = []
-
-    this.getItems(Status.Active).subscribe(item => {
-      activeArray.push(item)
-    })
-
-    return activeArray
+  get completedTodos() {
+    return this.getItems(Status.Completed)
   }
 
+  get activeTodos() {
+    return this.getItems(Status.Active)
+  }
 
   addItem(title: string): void {
     const todoItem: Todolist = {
@@ -83,33 +71,23 @@ export class TodolistService {
   toggleCheckedItem(todo: Todolist): void {
     this.todos$ = this.todos$.pipe(
       map(item => {
-        if(item.id === todo.id) {
-          return {...item, completed: !item.completed}
-        } 
-        else return item
+        if(item.id === todo.id) return {...item, completed: !item.completed}
+      
+        return item
       })
     )
   }
 
-  toggleAll(status: Status): void {
-    let isCompletedResult
-    const isCompleted: Observable<boolean> = this.todos$.pipe(
-      every(item => item.completed === true)
-    )
-
-    isCompleted.subscribe(item => {
-      isCompletedResult = item
-    })
-
-    if ((status === 'all' && !isCompletedResult) || status === 'active') {
+  toggleAll(status: Status, isCompleted: boolean): void {
+    if ((status === 'all' && !isCompleted) || status === 'active') {
       this.todos$ = this.todos$.pipe(
         map(item => {
-          if (item.completed === false) {
-            return {...item, completed: true}
-          } else return item
+          if (item.completed === false) return {...item, completed: true}
+          
+          return item
         })
       )
-    } else if (isCompletedResult) {
+    } else if (isCompleted) {
       this.todos$ = this.todos$.pipe(
         map(item => {
          return {...item, completed: false}
@@ -132,9 +110,9 @@ export class TodolistService {
     )
   }
 
-  toggleButtonVisible(): void {
+  toggleButtonVisible(activeTodosLength: number, completedTodosLength: number): void {
     if (this.status !== 'all') {
-      if (this.activeTodos.length === 0 || this.completedTodos.length === 0) {
+      if (activeTodosLength === 0 || completedTodosLength === 0) {
         this.toggleBtnVisible = false;
       } else this.toggleBtnVisible = true;
     }

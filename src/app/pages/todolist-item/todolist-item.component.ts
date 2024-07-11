@@ -12,7 +12,7 @@ import { Todolist } from '../../shared/types/todolist.type';
 import { FormsModule } from '@angular/forms';
 import { NgClass } from '@angular/common';
 import { TodolistService } from '../../shared/services/todolist.service';
-import { map } from 'rxjs';
+import { count, map } from 'rxjs';
 
 @Component({
   selector: 'tdl-item',
@@ -26,11 +26,31 @@ export class TodolistItemComponent implements OnInit, AfterViewChecked {
   @Input({ required: true }) todo!: Todolist;
   @ViewChild('todoInputRef') inputRef?: ElementRef;
 
-  constructor(private todolistService: TodolistService) {}
-
   isEditing = false;
   randomLabel: string = '';
   title: string = '';
+
+  constructor(private todolistService: TodolistService) {}
+
+  get completedTodosLength(): number {
+    let completedLength: number = 0
+
+    this.todolistService.completedTodos.pipe(count()).subscribe(item => {
+      completedLength = item
+    })
+
+    return completedLength
+  }
+
+  get activeTodosLength(): number {
+    let activeLength: number = 0
+
+    this.todolistService.activeTodos.pipe(count()).subscribe(item => {
+      activeLength = item
+    })
+
+    return activeLength
+  }
 
   removeTodo(): void {
     this.remove.emit(this.todo);
@@ -39,7 +59,7 @@ export class TodolistItemComponent implements OnInit, AfterViewChecked {
   toggleTodo(): void {
     this.todolistService.toggleCheckedItem(this.todo);
 
-    this.todolistService.toggleButtonVisible();
+    this.todolistService.toggleButtonVisible(this.activeTodosLength, this.completedTodosLength);
   }
 
   startEdit(): void {
@@ -75,7 +95,7 @@ export class TodolistItemComponent implements OnInit, AfterViewChecked {
     this.randomLabel =
       this.todo.title.replace(' ', '-').slice(0, 10) +
       '-' +
-      Math.floor(Math.random() * 100);
+      Math.floor(Math.random() * 1000);
   }
 
   ngAfterViewChecked(): void {

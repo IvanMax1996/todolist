@@ -16,11 +16,23 @@ export class TodolistFooterComponent {
   constructor(private todolistService: TodolistService) {}
 
   get activeTodos(): Todolist[] {
-    return this.todolistService.activeTodos
+    const activeArray: Todolist[] = []
+
+    this.todolistService.activeTodos.subscribe(item => {
+      activeArray.push(item)
+    })
+
+    return activeArray
   }
 
   get completedTodos(): Todolist[] {
-    return this.todolistService.completedTodos
+    const completedArray: Todolist[] = []
+
+    this.todolistService.completedTodos.subscribe(item => {
+      completedArray.push(item)
+    })
+
+    return completedArray
   }
 
   visibilityToggleButton(filteredTodo: Todolist[]): void {
