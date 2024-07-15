@@ -20,16 +20,16 @@ export class TodolistListingComponent {
   }
 
   get countTodo(): number {
-    let countObservable: number = 0
+    let count: number = 0
 
     this.todolistService.todos$.subscribe(item => {
-      countObservable = item.length
+      count = item.length
     })
 
-    return countObservable
+    return count
   }
 
-  get todoList(): Observable<TodoItem[]> {
+  get todoList() {
     return this.todolistService.getItems(this.status)
   }
 

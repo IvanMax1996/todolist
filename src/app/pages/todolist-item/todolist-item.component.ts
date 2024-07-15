@@ -32,35 +32,36 @@ export class TodolistItemComponent implements OnInit, AfterViewChecked {
 
   constructor(private todolistService: TodolistService) {}
 
-  // get completedTodosLength(): number {
-  //   let completedLength: number = 0
+  get completedTodosLength(): number {
+    let completedLength: number = 0
 
-  //   this.todolistService.completedTodos.pipe(count()).subscribe(item => {
-  //     completedLength = item
-  //   })
+    this.todolistService.completedTodos.subscribe(item => {
+      completedLength = item.length
+    })
 
-  //   return completedLength
-  // }
+    return completedLength
+  }
 
-  // get activeTodosLength(): number {
-  //   let activeLength: number = 0
+  get activeTodosLength(): number {
+    let activeLength: number = 0
 
-  //   this.todolistService.activeTodos.pipe(count()).subscribe(item => {
-  //     activeLength = item
-  //   })
+    this.todolistService.activeTodos.subscribe(item => {
+      activeLength = item.length
+    })
 
-  //   return activeLength
-  // }
+    return activeLength
+  }
 
   removeTodo(): void {
     this.remove.emit(this.todo);
   }
 
-  // toggleTodo(): void {
-  //   this.todolistService.toggleCheckedItem(this.todo);
+  toggleTodo(): void {
+  
+    this.todolistService.toggleCheckedItem(this.todo);
 
-  //   this.todolistService.toggleButtonVisible(this.activeTodosLength, this.completedTodosLength);
-  // }
+    this.todolistService.toggleButtonVisible(this.activeTodosLength, this.completedTodosLength);
+  }
 
   startEdit(): void {
     this.isEditing = true;

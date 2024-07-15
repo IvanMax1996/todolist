@@ -15,21 +15,21 @@ export class TodolistFooterComponent {
   constructor(private todolistService: TodolistService) {}
 
   get activeTodos(): TodoItem[] {
-    const activeArray: TodoItem[] = []
+    let activeArray: TodoItem[] = []
 
-    // this.todolistService.activeTodos.subscribe(item => {
-    //   activeArray.push(item)
-    // })
+    this.todolistService.activeTodos.subscribe(item => {
+      activeArray = item
+    })
 
     return activeArray
   }
 
   get completedTodos(): TodoItem[] {
-    const completedArray: TodoItem[] = []
+    let completedArray: TodoItem[] = []
 
-    // this.todolistService.completedTodos.subscribe(item => {
-    //   completedArray.push(item)
-    // })
+    this.todolistService.completedTodos.subscribe(item => {
+      completedArray = item
+    })
 
     return completedArray
   }
@@ -77,11 +77,11 @@ export class TodolistFooterComponent {
     this.removeActiveClass(event);
   }
 
-  // clearCompleted(): void {
-  //   this.todolistService.clearCompleted();
+  clearCompleted(): void {
+    this.todolistService.clearCompleted();
 
-  //   if (this.activeTodos.length === 0) {
-  //     this.todolistService.status = Status.All;
-  //   }
-  // }
+    if (this.activeTodos.length === 0) {
+      this.todolistService.status = Status.All;
+    }
+  }
 }

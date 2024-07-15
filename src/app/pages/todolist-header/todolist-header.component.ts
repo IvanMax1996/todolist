@@ -13,22 +13,22 @@ import { count } from 'rxjs';
   styleUrl: './todolist-header.component.scss',
 })
 export class TodolistHeaderComponent {
-  title: string = '';
- 
   constructor(private todolistService: TodolistService) {}
 
+  title: string = '';
+ 
   get status(): Status {
     return this.todolistService.status;
   }
 
   get countTodo(): number {
-    let countObservable: number = 0
+    let count: number = 0
 
     this.todolistService.todos$.subscribe(item => {
-      countObservable = item.length
+      count = item.length
     })
 
-    return countObservable
+    return count
   }
 
   get completedTodosLength(): number {
@@ -44,7 +44,7 @@ export class TodolistHeaderComponent {
   get activeTodosLength(): number {
     let activeLength: number = 0
 
-    this.todolistService.completedTodos.subscribe(item => {
+    this.todolistService.activeTodos.subscribe(item => {
       activeLength = item.length
     })
 
@@ -67,15 +67,15 @@ export class TodolistHeaderComponent {
     } else this.todolistService.toggleBtnVisible = true;
   }
 
-  // toggleAll(): void {
-  //   let isCompletedResult: boolean = false
+  toggleAll(): void {
+    let isCompletedResult: boolean = false
 
-  //   this.todolistService.isCompleted.subscribe(item => {
-  //     isCompletedResult = item
-  //   })
+    this.todolistService.isCompleted.subscribe(item => {
+      isCompletedResult = item
+    })
 
-  //   this.todolistService.toggleAll(this.status, isCompletedResult);
+    this.todolistService.toggleAll(this.status, isCompletedResult);
 
-  //   this.todolistService.toggleButtonVisible(this.activeTodosLength, this.completedTodosLength);
-  // }
+    this.todolistService.toggleButtonVisible(this.activeTodosLength, this.completedTodosLength);
+  }
 }
