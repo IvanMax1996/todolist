@@ -2,13 +2,13 @@
   @if (!isEditing) {
     <div class="todolist__item-wrap-input">
       <div class="todolist__item-inner-input">
-        <input
+        <!-- <input
           type="checkbox"
           [checked]="todo.completed"
           class="todolist__item-input"
           [id]="randomLabel"
           (click)="toggleTodo()"
-        />
+        /> -->
         <label [htmlFor]="randomLabel"></label>
       </div>
 
@@ -23,7 +23,7 @@
     <button (click)="removeTodo()" class="todolist__item-btn"></button>
   } @else {
     <div class="todolist__item-input-edit-wrap">
-      <input
+      <!-- <input
         #todoInputRef
         id="todolist__item-input-edit"
         [(ngModel)]="title"
@@ -31,7 +31,7 @@
         (blur)="handleBlur()"
         (keyup.enter)="updateTodo()"
         class="todolist__item-input-edit"
-      />
+      /> -->
 
       <label class="visually-hidden" htmlFor="todolist__item-input-edit">
         Edit Todo title

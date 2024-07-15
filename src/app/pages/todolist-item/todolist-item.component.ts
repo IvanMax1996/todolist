@@ -8,7 +8,7 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import { Todolist } from '../../shared/types/todolist.type';
+import { TodoItem } from '../../shared/types/todolist.type';
 import { FormsModule } from '@angular/forms';
 import { NgClass } from '@angular/common';
 import { TodolistService } from '../../shared/services/todolist.service';
@@ -22,8 +22,8 @@ import { count, map } from 'rxjs';
   styleUrl: './todolist-item.component.scss',
 })
 export class TodolistItemComponent implements OnInit, AfterViewChecked {
-  @Output() remove = new EventEmitter<Todolist>();
-  @Input({ required: true }) todo!: Todolist;
+  @Output() remove = new EventEmitter<TodoItem>();
+  @Input({ required: true }) todo!: TodoItem;
   @ViewChild('todoInputRef') inputRef?: ElementRef;
 
   isEditing = false;
@@ -32,56 +32,56 @@ export class TodolistItemComponent implements OnInit, AfterViewChecked {
 
   constructor(private todolistService: TodolistService) {}
 
-  get completedTodosLength(): number {
-    let completedLength: number = 0
+  // get completedTodosLength(): number {
+  //   let completedLength: number = 0
 
-    this.todolistService.completedTodos.pipe(count()).subscribe(item => {
-      completedLength = item
-    })
+  //   this.todolistService.completedTodos.pipe(count()).subscribe(item => {
+  //     completedLength = item
+  //   })
 
-    return completedLength
-  }
+  //   return completedLength
+  // }
 
-  get activeTodosLength(): number {
-    let activeLength: number = 0
+  // get activeTodosLength(): number {
+  //   let activeLength: number = 0
 
-    this.todolistService.activeTodos.pipe(count()).subscribe(item => {
-      activeLength = item
-    })
+  //   this.todolistService.activeTodos.pipe(count()).subscribe(item => {
+  //     activeLength = item
+  //   })
 
-    return activeLength
-  }
+  //   return activeLength
+  // }
 
   removeTodo(): void {
     this.remove.emit(this.todo);
   }
 
-  toggleTodo(): void {
-    this.todolistService.toggleCheckedItem(this.todo);
+  // toggleTodo(): void {
+  //   this.todolistService.toggleCheckedItem(this.todo);
 
-    this.todolistService.toggleButtonVisible(this.activeTodosLength, this.completedTodosLength);
-  }
+  //   this.todolistService.toggleButtonVisible(this.activeTodosLength, this.completedTodosLength);
+  // }
 
   startEdit(): void {
     this.isEditing = true;
   }
 
-  updateTodo(): void {
-    if (!this.title) {
-      this.remove.emit(this.todo);
-    } else {
-      this.todolistService.todos$.pipe(
-        map(item => {
-          if (item.id === this.todo.id) {
-            return {...item, title: this.title}
-          } 
-          else return item
-        })
-      )
-    }
+  // updateTodo(): void {
+  //   if (!this.title) {
+  //     this.remove.emit(this.todo);
+  //   } else {
+  //     this.todolistService.todos$.pipe(
+  //       map(item => {
+  //         if (item.id === this.todo.id) {
+  //           return {...item, title: this.title}
+  //         } 
+  //         else return item
+  //       })
+  //     )
+  //   }
 
-    this.isEditing = false;
-  }
+  //   this.isEditing = false;
+  // }
 
   handleBlur(): void {
     this.isEditing = false;

@@ -24,8 +24,8 @@ export class TodolistHeaderComponent {
   get countTodo(): number {
     let countObservable: number = 0
 
-    this.todolistService.countTodo.subscribe(item => {
-      countObservable = item
+    this.todolistService.todos$.subscribe(item => {
+      countObservable = item.length
     })
 
     return countObservable
@@ -34,8 +34,8 @@ export class TodolistHeaderComponent {
   get completedTodosLength(): number {
     let completedLength: number = 0
 
-    this.todolistService.completedTodos.pipe(count()).subscribe(item => {
-      completedLength = item
+    this.todolistService.completedTodos.subscribe(item => {
+      completedLength = item.length
     })
 
     return completedLength
@@ -44,8 +44,8 @@ export class TodolistHeaderComponent {
   get activeTodosLength(): number {
     let activeLength: number = 0
 
-    this.todolistService.activeTodos.pipe(count()).subscribe(item => {
-      activeLength = item
+    this.todolistService.completedTodos.subscribe(item => {
+      activeLength = item.length
     })
 
     return activeLength
@@ -67,15 +67,15 @@ export class TodolistHeaderComponent {
     } else this.todolistService.toggleBtnVisible = true;
   }
 
-  toggleAll(): void {
-    let isCompletedResult: boolean = false
+  // toggleAll(): void {
+  //   let isCompletedResult: boolean = false
 
-    this.todolistService.isCompleted.subscribe(item => {
-      isCompletedResult = item
-    })
+  //   this.todolistService.isCompleted.subscribe(item => {
+  //     isCompletedResult = item
+  //   })
 
-    this.todolistService.toggleAll(this.status, isCompletedResult);
+  //   this.todolistService.toggleAll(this.status, isCompletedResult);
 
-    this.todolistService.toggleButtonVisible(this.activeTodosLength, this.completedTodosLength);
-  }
+  //   this.todolistService.toggleButtonVisible(this.activeTodosLength, this.completedTodosLength);
+  // }
 }

@@ -1,7 +1,7 @@
-export interface Todolist {
-    id: number,
-    title: string;
-    completed: boolean;
+export interface TodoItem {
+  id: number;
+  title: string;
+  completed: boolean;
 }
 
 export enum Status {

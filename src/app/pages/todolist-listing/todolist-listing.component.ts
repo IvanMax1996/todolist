@@ -1,9 +1,9 @@
 import { Component} from '@angular/core';
-import { Status, Todolist } from '../../shared/types/todolist.type';
+import { Status, TodoItem } from '../../shared/types/todolist.type';
 import { TodolistService } from '../../shared/services/todolist.service';
 import { TodolistItemComponent } from '../todolist-item/todolist-item.component';
 import { AsyncPipe } from '@angular/common';
-import { Observable, toArray } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'tdl-listing',
@@ -22,18 +22,18 @@ export class TodolistListingComponent {
   get countTodo(): number {
     let countObservable: number = 0
 
-    this.todolistService.countTodo.subscribe(item => {
-      countObservable = item
+    this.todolistService.todos$.subscribe(item => {
+      countObservable = item.length
     })
 
     return countObservable
   }
 
-  get todoList(): Observable<Todolist[]> {
-    return this.todolistService.getItems(this.status).pipe(toArray())
+  get todoList(): Observable<TodoItem[]> {
+    return this.todolistService.getItems(this.status)
   }
 
-  removeTodo(todo: Todolist): void {
+  removeTodo(todo: TodoItem): void {
     this.todolistService.removeItem(todo);
   }
 }
