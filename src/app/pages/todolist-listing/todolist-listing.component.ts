@@ -3,7 +3,6 @@ import { Status, TodoItem } from '../../shared/types/todolist.type';
 import { TodolistService } from '../../shared/services/todolist.service';
 import { TodolistItemComponent } from '../todolist-item/todolist-item.component';
 import { AsyncPipe } from '@angular/common';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'tdl-listing',

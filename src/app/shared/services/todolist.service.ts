@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Status, TodoItem } from '../types/todolist.type';
-import { BehaviorSubject, every, filter, flatMap, from, map, Observable, switchMap, tap, toArray } from 'rxjs';
+import { BehaviorSubject, every, filter, from, Observable, switchMap, toArray } from 'rxjs';
 
 @Injectable()
 export class TodolistService {
@@ -85,7 +85,7 @@ export class TodolistService {
   }
 
   toggleAll(status: Status, isCompleted: boolean): void {
-    let arrayResult: any = []
+    let arrayResult: TodoItem[] = []
 
     if ((status === 'all' && !isCompleted) || status === 'active') {
       arrayResult = this.todos$.value.map((item) => {
@@ -112,8 +112,22 @@ export class TodolistService {
     }
   }
 
+  updateTodo(todo: TodoItem, title: string) {
+    let arrayResult: TodoItem[]
+
+    arrayResult = this.todos$.value.map(item => {
+      if (item.id === todo.id) {
+        return {...item, title}
+      } 
+
+      return item
+    })
+  
+    this.todos$.next(arrayResult)
+  }
+
   clearCompleted(): void {
-    let arrayResult: any = []
+    let arrayResult: TodoItem[] = []
 
     arrayResult = this.todos$.value.filter(item => {
       return !item.completed

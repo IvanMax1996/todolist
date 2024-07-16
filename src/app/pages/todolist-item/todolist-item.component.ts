@@ -12,7 +12,6 @@ import { TodoItem } from '../../shared/types/todolist.type';
 import { FormsModule } from '@angular/forms';
 import { NgClass } from '@angular/common';
 import { TodolistService } from '../../shared/services/todolist.service';
-import { count, map } from 'rxjs';
 
 @Component({
   selector: 'tdl-item',
@@ -57,7 +56,6 @@ export class TodolistItemComponent implements OnInit, AfterViewChecked {
   }
 
   toggleTodo(): void {
-  
     this.todolistService.toggleCheckedItem(this.todo);
 
     this.todolistService.toggleButtonVisible(this.activeTodosLength, this.completedTodosLength);
@@ -67,22 +65,15 @@ export class TodolistItemComponent implements OnInit, AfterViewChecked {
     this.isEditing = true;
   }
 
-  // updateTodo(): void {
-  //   if (!this.title) {
-  //     this.remove.emit(this.todo);
-  //   } else {
-  //     this.todolistService.todos$.pipe(
-  //       map(item => {
-  //         if (item.id === this.todo.id) {
-  //           return {...item, title: this.title}
-  //         } 
-  //         else return item
-  //       })
-  //     )
-  //   }
+  updateTodo(): void {
+    if (!this.title) {
+      this.remove.emit(this.todo);
+    } else {
+      this.todolistService.updateTodo(this.todo, this.title)
+    }
 
-  //   this.isEditing = false;
-  // }
+    this.isEditing = false;
+  }
 
   handleBlur(): void {
     this.isEditing = false;
