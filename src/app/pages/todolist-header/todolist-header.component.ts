@@ -31,11 +31,11 @@ export class TodolistHeaderComponent {
     return count
   }
 
-  get isCompleted(): boolean {
+  get isCompleted() {
     let isCompleted: boolean = false
 
     this.todolistService.isCompleted.subscribe(item => {
-      isCompleted = item
+      console.log(item)
     })
 
     this.count++
