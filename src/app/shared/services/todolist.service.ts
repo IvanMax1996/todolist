@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Status, TodoItem } from '../types/todolist.type';
-import { BehaviorSubject, every, filter, from, map, Observable, switchMap, toArray } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 
 @Injectable()
 export class TodolistService {
@@ -9,7 +9,7 @@ export class TodolistService {
   countId: number = 0;
   todos$: BehaviorSubject<TodoItem[]> = new BehaviorSubject<TodoItem[]>([])
 
-  get isCompleted() {
+  get isCompleted(): Observable<boolean> {
     return this.todos$.pipe(
       map(item => item.every(item => item.completed))
     )
@@ -39,21 +39,11 @@ export class TodolistService {
     switch (status) {
       case 'active':
         return this.todos$.pipe(
-          switchMap(item => {
-            return from(item).pipe(
-              filter((item) => !item.completed),
-              toArray()
-            )
-          })
+          map(item => item.filter(item => !item.completed))
         )
       case 'completed':
         return this.todos$.pipe(
-          switchMap(item => {
-            return from(item).pipe(
-              filter((item) => item.completed),
-              toArray()
-            )
-          })
+          map(item => item.filter(item => item.completed))
         )
     }
 
