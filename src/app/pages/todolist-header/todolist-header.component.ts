@@ -79,7 +79,6 @@ export class TodolistHeaderComponent {
   }
 
   toggleAll(): void {
-    console.log('toggle')
     this.todolistService.toggleAll(this.status, this.isCompleted);
 
     this.todolistService.toggleButtonVisible(this.activeTodosLength, this.completedTodosLength);

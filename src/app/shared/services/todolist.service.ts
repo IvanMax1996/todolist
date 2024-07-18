@@ -13,7 +13,7 @@ export class TodolistService {
     return this.todos$.pipe(
       switchMap(item => {
         return from(item).pipe(
-          every((item) => item.completed === true)
+          every((item) => item.completed)
         )
       })
     )
