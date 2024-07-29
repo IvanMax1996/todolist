@@ -51,6 +51,10 @@ export class TodolistItemComponent implements OnInit, AfterViewChecked {
     return activeLength
   }
 
+  get test() {
+    return this.todo.id
+  }
+
   removeTodo(): void {
     this.remove.emit(this.todo);
   }

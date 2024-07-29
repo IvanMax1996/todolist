@@ -9,7 +9,7 @@ export class TodolistService {
   countId: number = 0;
   todos$: BehaviorSubject<TodoItem[]> = new BehaviorSubject<TodoItem[]>([])
 
-  get isCompleted(): Observable<boolean> {
+  get isAllCompleted(): Observable<boolean> {
     return this.todos$.pipe(
       map(item => item.every(item => item.completed))
     )
@@ -37,11 +37,11 @@ export class TodolistService {
 
   getItems(status: Status): Observable<TodoItem[]> {
     switch (status) {
-      case 'active':
+      case Status.Active:
         return this.todos$.pipe(
           map(item => item.filter(item => !item.completed))
         )
-      case 'completed':
+      case Status.Completed:
         return this.todos$.pipe(
           map(item => item.filter(item => item.completed))
         )
@@ -50,8 +50,13 @@ export class TodolistService {
     return this.todos$;
   }
 
-  removeItem(todo: TodoItem): void {
-    const indexItem = this.todos$.value.indexOf(todo)
+  removeItem(todoID: number): void {
+    let indexItem!: number
+    const todoItem: TodoItem | undefined = this.todos$.value.find(item => item.id === todoID)
+    
+    if (todoItem) {
+      indexItem = this.todos$.value.indexOf(todoItem)
+    }
 
     this.todos$.next((this.todos$.value as any).toSpliced(indexItem, 1))
   }

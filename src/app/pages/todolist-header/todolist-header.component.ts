@@ -34,7 +34,7 @@ export class TodolistHeaderComponent {
   get isCompleted(): boolean {
     let isCompleted: boolean = false
 
-    this.todolistService.isCompleted.subscribe(item => {
+    this.todolistService.isAllCompleted.subscribe(item => {
       isCompleted = item
     })
 

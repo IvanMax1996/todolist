@@ -33,6 +33,6 @@ export class TodolistListingComponent {
   }
 
   removeTodo(todo: TodoItem): void {
-    this.todolistService.removeItem(todo);
+    this.todolistService.removeItem(todo.id);
   }
 }
