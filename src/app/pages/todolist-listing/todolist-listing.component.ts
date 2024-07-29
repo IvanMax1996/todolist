@@ -32,7 +32,37 @@ export class TodolistListingComponent {
     return this.todolistService.getItems(this.status)
   }
 
+  get activeTodos(): TodoItem[] {
+    let activeArray: TodoItem[] = []
+
+    this.todolistService.activeTodos.subscribe(item => {
+      activeArray = item
+    })
+
+    return activeArray
+  }
+
+  get completedTodos(): TodoItem[] {
+    let completedArray: TodoItem[] = []
+
+    this.todolistService.completedTodos.subscribe(item => {
+      completedArray = item
+    })
+
+    return completedArray
+  }
+
   removeTodo(todo: TodoItem): void {
     this.todolistService.removeItem(todo.id);
+
+    if ((this.status === Status.Active && this.activeTodos.length === 0)
+      || (this.status === Status.Completed && this.completedTodos.length === 0)
+    ) {
+      this.todolistService.toggleBtnVisible = false
+    }
+
+    if (this.completedTodos.length === 0 && this.activeTodos.length === 0) {
+      this.todolistService.status = Status.All;
+    }
   }
 }

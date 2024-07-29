@@ -78,29 +78,21 @@ export class TodolistService {
   toggleAll(status: Status, isCompleted: boolean): void {
     let arrayResult: TodoItem[] = []
 
-    if ((status === 'all' && !isCompleted) || status === 'active') {
+    if ((status === Status.All && !isCompleted) || status === Status.Active) {
       arrayResult = this.todos$.value.map((item) => {
-        if (item.completed === false) {
+        if (!item.completed) {
           return {...item, completed: true}
         } 
           
         return item
        })
-      
-       this.todos$.next(arrayResult)
-    } else if (isCompleted) {
-      arrayResult = this.todos$.value.map((item) => {
-        return {...item, completed: false}
-       })
-      
-       this.todos$.next(arrayResult)
     } else {
       arrayResult = this.todos$.value.map((item) => {
         return {...item, completed: false}
        })
-      
-       this.todos$.next(arrayResult)
     }
+
+    this.todos$.next(arrayResult)
   }
 
   updateTodo(todo: TodoItem, title: string) {
@@ -128,7 +120,7 @@ export class TodolistService {
   }
 
   toggleButtonVisible(activeTodosLength: number, completedTodosLength: number): void {
-    if (this.status !== 'all') {
+    if (this.status !== Status.All) {
       if (activeTodosLength === 0 || completedTodosLength === 0) {
         this.toggleBtnVisible = false;
       } else this.toggleBtnVisible = true;
