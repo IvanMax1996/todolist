@@ -1,65 +1,65 @@
-import { Component} from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { TodolistService } from '../../shared/services/todolist.service';
-import { AsyncPipe } from '@angular/common';
-import { Status } from '../../shared/types/todolist.type';
+import { Component } from "@angular/core";
+import { FormsModule } from "@angular/forms";
+import { TodolistService } from "../../shared/services/todolist.service";
+import { AsyncPipe } from "@angular/common";
+import { Status } from "../../shared/types/todolist.type";
 
 @Component({
   standalone: true,
-  selector: 'tdl-header',
+  selector: "tdl-header",
   imports: [FormsModule, AsyncPipe],
-  templateUrl: './todolist-header.component.html',
-  styleUrl: './todolist-header.component.scss',
+  templateUrl: "./todolist-header.component.html",
+  styleUrl: "./todolist-header.component.scss"
 })
 export class TodolistHeaderComponent {
   constructor(private todolistService: TodolistService) {}
 
-  title: string = '';
-  count = 0
- 
+  title: string = "";
+  count = 0;
+
   get status(): Status {
     return this.todolistService.status;
   }
 
   get countTodo(): number {
-    let count: number = 0
+    let count: number = 0;
 
     this.todolistService.todos$.subscribe(item => {
-      count = item.length
-    })
+      count = item.length;
+    });
 
-    return count
+    return count;
   }
 
   get isCompleted(): boolean {
-    let isCompleted: boolean = false
+    let isCompleted: boolean = false;
 
     this.todolistService.isAllCompleted.subscribe(item => {
-      isCompleted = item
-    })
+      isCompleted = item;
+    });
 
-    this.count++
-    return isCompleted
+    this.count++;
+    return isCompleted;
   }
 
   get completedTodosLength(): number {
-    let completedLength: number = 0
+    let completedLength: number = 0;
 
     this.todolistService.completedTodos.subscribe(item => {
-      completedLength = item.length
-    })
+      completedLength = item.length;
+    });
 
-    return completedLength
+    return completedLength;
   }
 
   get activeTodosLength(): number {
-    let activeLength: number = 0
+    let activeLength: number = 0;
 
     this.todolistService.activeTodos.subscribe(item => {
-      activeLength = item.length
-    })
+      activeLength = item.length;
+    });
 
-    return activeLength
+    return activeLength;
   }
 
   get toggleBtnVisible(): boolean {
@@ -70,7 +70,7 @@ export class TodolistHeaderComponent {
     if (this.title) {
       this.todolistService.addItem(this.title);
 
-      this.title = '';
+      this.title = "";
     }
 
     if (this.countTodo === 0) {
@@ -81,6 +81,9 @@ export class TodolistHeaderComponent {
   toggleAll(): void {
     this.todolistService.toggleAll(this.status, this.isCompleted);
 
-    this.todolistService.toggleButtonVisible(this.activeTodosLength, this.completedTodosLength);
+    this.todolistService.toggleButtonVisible(
+      this.activeTodosLength,
+      this.completedTodosLength
+    );
   }
 }
